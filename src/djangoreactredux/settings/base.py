@@ -22,10 +22,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'rest_framework',
-    'knox',
     'django_extensions',
 
-    'accounts',
     'base'
 )
 
@@ -71,8 +69,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-AUTH_USER_MODEL = 'accounts.User'
-
 ACCOUNT_ACTIVATION_DAYS = 7  # days
 
 STATIC_URL = '/static/'
@@ -99,11 +95,4 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ),
-}
-
-# ############ REST KNOX ########################
-REST_KNOX = {
-    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-    'USER_SERIALIZER': 'knox.serializers.UserSerializer'
 }
