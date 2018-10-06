@@ -1,56 +1,42 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Resource from '../../components/Resource'
+import { getResources } from '../../actions'
+
 import './style.scss';
-import reactLogo from './images/react-logo.png';
-import reduxLogo from './images/redux-logo.png';
 
 class HomeView extends React.Component {
     static propTypes = {
-        statusText: PropTypes.string,
-        userName: PropTypes.string,
         dispatch: PropTypes.func.isRequired
     };
 
-    static defaultProps = {
-        statusText: '',
-        userName: ''
-    };
-
-    goToProtected = () => {
-        this.props.dispatch(push('/protected'));
-    };
+    componentWillMount() {
+        this.props.getResources();
+    }
 
     render() {
         return (
             <div className="container">
-                <div className="margin-top-medium text-center">
-                    <img className="page-logo margin-bottom-medium"
-                        src={reactLogo}
-                        alt="ReactJs"
-                    />
-                    <img className="page-logo margin-bottom-medium"
-                        src={reduxLogo}
-                        alt="Redux"
-                    />
-                </div>
-                <div className="text-center">
-                    <h1>Django React Redux Demo</h1>
-                    <h4>Hello, {this.props.userName || 'guest'}.</h4>
-                </div>
-                <div className="margin-top-medium text-center">
-                    <p>Attempt to access some <a onClick={this.goToProtected}><b>protected content</b></a>.</p>
-                </div>
-                <div className="margin-top-medium">
-                    {this.props.statusText ?
-                        <div className="alert alert-info">
-                            {this.props.statusText}
-                        </div>
-                        :
-                        null
-                    }
+                <div className="row">
+                    <div className="col-xs-6">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Resource</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.resources &&
+                                 this.props.resources.map((resource) => <Resource resource={resource} key={resource.id} />)
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );
@@ -59,10 +45,16 @@ class HomeView extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        userName: state.auth.userName,
-        statusText: state.auth.statusText
+        resources: state.resources.resources,
     };
 };
 
-export default connect(mapStateToProps)(HomeView);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatch,
+    getResources: bindActionCreators(getResources, dispatch)
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeView);
 export { HomeView as HomeViewNotConnected };
