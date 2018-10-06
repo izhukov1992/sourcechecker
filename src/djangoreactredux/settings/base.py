@@ -96,3 +96,6 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
     ),
 }
+
+LOGIN_URL='/admin/login/'
+LOGIN_REDIRECT_URL='/'
