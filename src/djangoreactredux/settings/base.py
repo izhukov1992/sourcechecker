@@ -20,6 +20,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.admin',
+    'django_celery_results',
 
     'rest_framework',
     'django_extensions',
@@ -99,3 +100,10 @@ REST_FRAMEWORK = {
 
 LOGIN_URL='/admin/login/'
 LOGIN_REDIRECT_URL='/'
+
+
+CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'

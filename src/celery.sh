@@ -1,0 +1,1 @@
+celery -A djangoreactredux beat

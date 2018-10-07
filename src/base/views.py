@@ -11,7 +11,6 @@ from base.models import Resource
 from base.serializers import ResourceSerializer
 
 import os
-import requests
 
 
 class IndexView(View):
@@ -37,15 +36,5 @@ class ResourcesView(APIView):
 
     def get(self, request):
         resources = Resource.objects.all()
-
-        for resource in resources:
-            try:
-                status_code = requests.get(resource.url).status_code
-            except:
-                status_code = 404
-
-            resource.status = (status_code > 199 and status_code < 300)
-            resource.save()
-
         serializer = ResourceSerializer(resources, many=True)
         return Response(serializer.data)

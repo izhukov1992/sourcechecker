@@ -25,3 +25,4 @@ django-rest-knox==3.0.3
 
 requests==2.19.1
 celery==3.1.25
+django-celery-results==1.0.1
