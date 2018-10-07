@@ -13,10 +13,12 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResourceCheckSerializer(serializers.Serializer):
+class ResourceCheckSerializer(ResourceSerializer):
     """
     Serializer of Reource object checking result
     """
 
-    status_code = serializers.IntegerField()
+    status = serializers.SerializerMethodField('status_code')
 
+    def status_code(self, obj):
+        return self.context.get('status_code')

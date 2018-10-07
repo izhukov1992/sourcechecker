@@ -51,5 +51,14 @@ class ResourceCheckView(APIView):
 
     def get(self, request, pk):
         resource = self.get_object(pk)
-        serializer = ResourceCheckSerializer(requests.get(resource.url))
+
+        try:
+            status_code = requests.get(resource.url).status_code
+        except:
+            status_code = 404
+
+        context = {
+            'status_code': status_code
+        }
+        serializer = ResourceCheckSerializer(resource, context=context)
         return Response(serializer.data)
