@@ -10,11 +10,6 @@ export default function resourcesReducer(state = initialState, action) {
             return Object.assign({}, state, {
                 resources: action.resources
             });
-        case RESOURCES_CHECK:
-            return Object.assign({}, state, {
-                ...state,
-                resources: state.resources.map((resource) => resource.id === action.resource.id ? action.resource : resource)
-            });
         default:
             return state;
     }

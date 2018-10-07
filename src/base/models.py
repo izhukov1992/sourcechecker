@@ -7,6 +7,7 @@ class Resource(models.Model):
     """
 
     url = models.URLField()
+    status = models.NullBooleanField()
 
     def __str__(self):
         return self.url

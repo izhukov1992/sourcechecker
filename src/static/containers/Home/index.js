@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Resource from '../../components/Resource'
-import { getResources, checkResource } from '../../actions'
+import { getResources } from '../../actions'
 
 import './style.scss';
 
@@ -21,16 +21,10 @@ class HomeView extends React.Component {
         this.state = {
             timer: null
         };
-
-        this.check = this.check.bind(this);
-    }
-
-    componentWillMount() {
-        this.props.getResources();
     }
 
     componentDidMount() {
-        let timer = setInterval(this.check, 5000);
+        let timer = setInterval(this.props.getResources, 5000);
         this.setState({timer});
     }
 
@@ -38,17 +32,11 @@ class HomeView extends React.Component {
         this.clearInterval(this.state.timer);
     }
 
-    check = () => {
-        if (this.props.resources) {
-            this.props.resources.map((resource) => this.props.dispatch(checkResource(resource.id)));
-        }
-    }
-
     render() {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-xs-6">
+                    <div className="col-xs-12">
                         <table className="table">
                             <thead>
                                 <tr>

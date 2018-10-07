@@ -8,6 +8,7 @@ class ResourceAdmin(admin.ModelAdmin):
     """
 
     model = Resource
+    fields = ('url', )
 
 
 admin.site.register(Resource, ResourceAdmin)

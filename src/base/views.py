@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from base.models import Resource
-from base.serializers import ResourceSerializer, ResourceCheckSerializer
+from base.serializers import ResourceSerializer
 
 import os
 import requests
@@ -28,37 +28,24 @@ class IndexView(View):
         return HttpResponse(content=abspath.read())
 
 
-class ResourceViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet class of Resource model.
-    """
-
-    queryset = Resource.objects.all()
-    serializer_class = ResourceSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class ResourceCheckView(APIView):
+class ResourcesView(APIView):
     """
     Return protected data main page.
     """
 
-    def get_object(self, pk):
-        try:
-            return Resource.objects.get(pk=pk)
-        except Resource.DoesNotExist:
-            raise Http404
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk):
-        resource = self.get_object(pk)
+    def get(self, request):
+        resources = Resource.objects.all()
 
-        try:
-            status_code = requests.get(resource.url).status_code
-        except:
-            status_code = 404
+        for resource in resources:
+            try:
+                status_code = requests.get(resource.url).status_code
+            except:
+                status_code = 404
 
-        context = {
-            'status_code': status_code
-        }
-        serializer = ResourceCheckSerializer(resource, context=context)
+            resource.status = (status_code > 199 and status_code < 300)
+            resource.save()
+
+        serializer = ResourceSerializer(resources, many=True)
         return Response(serializer.data)
