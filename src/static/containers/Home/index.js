@@ -5,17 +5,43 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Resource from '../../components/Resource'
-import { getResources } from '../../actions'
+import { getResources, checkResource } from '../../actions'
 
 import './style.scss';
 
 class HomeView extends React.Component {
     static propTypes = {
-        dispatch: PropTypes.func.isRequired
-    };
+        dispatch: PropTypes.func.isRequired,
+        getResources: PropTypes.func.isRequired
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            timer: null
+        };
+
+        this.check = this.check.bind(this);
+    }
 
     componentWillMount() {
         this.props.getResources();
+    }
+
+    componentDidMount() {
+        let timer = setInterval(this.check, 5000);
+        this.setState({timer});
+    }
+
+    componentWillUnmount() {
+        this.clearInterval(this.state.timer);
+    }
+
+    check = () => {
+        if (this.props.resources) {
+            this.props.resources.map((resource) => this.props.dispatch(checkResource(resource.id)));
+        }
     }
 
     render() {

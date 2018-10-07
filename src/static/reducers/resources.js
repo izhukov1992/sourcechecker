@@ -1,6 +1,7 @@
 import { RESOURCES_GET_ALL, RESOURCES_CHECK } from '../constants';
 
 const initialState = {
+    resources: []
 };
 
 export default function resourcesReducer(state = initialState, action) {
